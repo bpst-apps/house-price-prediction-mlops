@@ -2,38 +2,43 @@
 import os
 import sys
 
-
-# Defining housing exception class
 class HousingException(Exception):
-    def __init__(self, error_message: Exception, error_detail: sys):
+    
+    def __init__(self, error_message: Exception, error_detail: sys) -> None:
         super().__init__(error_message)
-        self.error_message = HousingException().get_error_message_details(
+        self.error_message = HousingException.get_error_message(
             error_message=error_message,
             error_detail=error_detail
         )
-
-    @staticmethod
-    def get_error_message_details(error_message: Exception, error_detail: sys) -> str:
-        """
-        Description:  Method to get exception details i.e. which file and line number the
-        exception occurred.
-
-        :param error_message: Exception object
-        :param error_detail: Object of sys module
-        :return: Error message with file name and line number
-        """
+        
+        
+    def get_error_message(error_message: Exception, error_detail: sys) -> str:
+        
+        # Get error message details
         _, _, exec_tb = error_detail.exc_info()
-
-        line_number = exec_tb.tb_frame.f_lineno
-        file_name = exec_tb.tb_frame.f_code.co_filename
-
-        error_message = f'Error occurred in script: [{file_name}] at line number: [{line_number}] \
-            error message: [{error_message}]'
-
+        
+        # Get exception block line number
+        exception_block_line_number = exec_tb.tb_frame.f_lineno
+        
+        # Get try block line number
+        try_block_line_number = exec_tb.tb_lineno
+        
+        # Get filename where exception occured
+        filename = exec_tb.tb_frame.f_code.co_filename
+        
+        # Define error message
+        error_message = f"""
+        Error occured in script: 
+        [ {filename} ] at 
+        try block line number: [{try_block_line_number}] and 
+        exception block line number: [{exception_block_line_number}] 
+        error message: [{error_message}]
+        """
+        
         return error_message
-
+    
     def __str__(self) -> str:
         return self.error_message
-
+    
     def __repr__(self) -> str:
         return HousingException.__name__.str()

@@ -1,20 +1,24 @@
-# Importing required packages
+# Importing requied packages
 import os
 import logging
 from datetime import datetime
 
+# Define logging directory
+LOG_DIR = 'app_logs'
 
-# Define login variables
-LOG_DIR = 'housing_logs'
-CURRENT_TIMESTAMP = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
-LOG_FILENAME = f'log_{CURRENT_TIMESTAMP}.log'
+# Define current timestamp
+CURRENT_TIME_STAMP = f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}"
 
+# Define log file name
+LOG_FILE_NAME = f"log_{CURRENT_TIME_STAMP}.log"
 
-# Create log directory
+# Create logging directory if not exits
 os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE_PATH = os.path.join(LOG_DIR, LOG_FILENAME)
 
-# Configure logging module
+# Define log file path
+LOG_FILE_PATH = os.path.join(LOG_DIR, LOG_FILE_NAME)
+
+# Define logging basic configuration
 logging.basicConfig(
     filename=LOG_FILE_PATH,
     filemode='w',
