@@ -1,3 +1,11 @@
+#===========================================================================
+#  ?                                ABOUT
+#  @author         :  Bhanu Pratap Singh
+#  @email          :  bpst.work@gmail.com
+#  @repo           :  https://github.com/bpst-apps/house-price-prediction-mlops
+#  @createdOn      :  26 June, 2022
+#  @description    :  Configuration class for housing price prediction
+#===========================================================================
 # Importing required packages
 import os
 import sys
@@ -6,10 +14,13 @@ from housing.logger import logging
 from housing.util.util import read_yaml_file
 from housing.exception import HousingException
 
-from housing.entity.config_entity import (DataIngestionConfig, DataValidationConfig, DataTransformationConfig, 
-                                          ModelTrainerConfig, ModelEvaluationConfig, ModelPusherConfig,
+from housing.entity.config_entity import (DataIngestionConfig, 
+                                          DataValidationConfig, 
+                                          DataTransformationConfig, 
+                                          ModelTrainerConfig, 
+                                          ModelEvaluationConfig, 
+                                          ModelPusherConfig,
                                           TrainingPipelineConfig)
-
 
 class Configuration:
     
@@ -17,6 +28,16 @@ class Configuration:
                  config_file_path: str = CONFIG_FILE_PATH,
                  current_timestamp: str = CURRENT_TIMESTAMP
                  ) -> None:
+        """
+        
+
+        Args:
+            config_file_path (str, optional): _description_. Defaults to CONFIG_FILE_PATH.
+            current_timestamp (str, optional): _description_. Defaults to CURRENT_TIMESTAMP.
+
+        Raises:
+            HousingException: _description_
+        """
         try:
             # set yaml configuration file information
             self.config_info  = read_yaml_file(file_path=config_file_path)
@@ -29,8 +50,16 @@ class Configuration:
         except Exception as e:
             raise HousingException(e,sys) from e
     
-    
     def get_data_ingestion_config(self) -> DataIngestionConfig:
+        """
+        
+
+        Raises:
+            HousingException: _description_
+
+        Returns:
+            DataIngestionConfig: _description_
+        """
         try:
             # Get artifact directory path
             artifact_dir = self.training_pipeline_config.artifact_dir
@@ -93,6 +122,15 @@ class Configuration:
             raise HousingException(e,sys) from e
         
     def get_data_validation_config(self) -> DataValidationConfig:
+        """
+        
+
+        Raises:
+            HousingException: _description_
+
+        Returns:
+            DataValidationConfig: _description_
+        """
         try:
             # Initialize schema file path variable
             schema_file_path = None
@@ -113,6 +151,15 @@ class Configuration:
             raise HousingException(e,sys) from e
     
     def get_training_pipeline_config(self) -> TrainingPipelineConfig:
+        """
+        
+
+        Raises:
+            HousingException: _description_
+
+        Returns:
+            TrainingPipelineConfig: _description_
+        """
         try:
             # Getting training file configuration
             training_pipeline_config = self.config_info[TRAINING_PIPELINE_CONFIG_KEY]
@@ -130,3 +177,6 @@ class Configuration:
             return training_pipeline_config
         except Exception as e:
             raise HousingException(e,sys) from e
+        
+#============================= END OF CODE ==============================
+
