@@ -1,5 +1,5 @@
 #===========================================================================
-#  ?                                ABOUT
+#                                  configuration.py
 #  @author         :  Bhanu Pratap Singh
 #  @email          :  bpst.work@gmail.com
 #  @repo           :  https://github.com/bpst-apps/house-price-prediction-mlops
