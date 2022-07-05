@@ -3,7 +3,6 @@ from flask import Flask
 from housing.logger import logging
 from housing.exception import HousingException
 
-
 # Create flask application
 app = Flask(__name__)
 
@@ -18,4 +17,3 @@ def index():
 # Run flask application
 if __name__ == '__main__':
     app.run()
-

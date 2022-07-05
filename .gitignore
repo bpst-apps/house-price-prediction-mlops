@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+housing/artifact
 # Distribution / packaging
 .Python
 build/
@@ -128,6 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# PyCharm
 .idea
-.jovianrc

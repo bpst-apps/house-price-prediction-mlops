@@ -1,4 +1,4 @@
-# Importing requied packages
+# Importing required packages
 import os
 import logging
 from datetime import datetime
