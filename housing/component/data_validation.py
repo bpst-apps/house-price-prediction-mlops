@@ -4,25 +4,26 @@ import sys
 import json
 import pandas as pd
 
-from evidently.dashboard import Dashboard
-from evidently.model_profile import Profile
-from evidently.dashboard.tabs import DataDriftTab
-from evidently.model_profile.sections import DataDriftProfileSection
-
 from housing.logger import logging
 from housing.exception import HousingException
 from housing.entity.config_entity import DataValidationConfig
 from housing.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
 
+from evidently.dashboard import Dashboard
+from evidently.model_profile import Profile
+from evidently.dashboard.tabs import DataDriftTab
+from evidently.model_profile.sections import DataDriftProfileSection
+
 
 class DataValidation:
 
-    def __init__(self,
-                 data_validation_config: DataValidationConfig,
-                 data_ingestion_artifact: DataIngestionArtifact
-                 ) -> None:
+    def __init__(
+            self,
+            data_validation_config: DataValidationConfig,
+            data_ingestion_artifact: DataIngestionArtifact
+    ):
         try:
-            logging.info(f"{'= ' * 20}Data Validation log started.{'= ' * 20} \n\n")
+            logging.info(f"{'>>' * 30} Data validation log started. {'<<' * 30} \n\n")
             self.data_validation_config = data_validation_config
             self.data_ingestion_artifact = data_ingestion_artifact
         except Exception as e:
@@ -65,6 +66,17 @@ class DataValidation:
 
     def validate_dataset_schema(self) -> bool:
         try:
+            validation_status = False
+
+            # Assignment validate training and testing dataset using schema file
+            # 1. Number of Column
+            # 2. Check the value of ocean proximity
+            # acceptable values     <1H OCEAN
+            # INLAND
+            # ISLAND
+            # NEAR BAY
+            # NEAR OCEAN
+            # 3. Check column names
 
             validation_status = True
             return validation_status
@@ -132,4 +144,4 @@ class DataValidation:
             raise HousingException(e, sys) from e
 
     def __del__(self):
-        logging.info(f"{'= ' * 20}Data Validation log completed.{'= ' * 20} \n\n")
+        logging.info(f"{'>>' * 30}Data validation log completed.{'<<' * 30} \n\n")

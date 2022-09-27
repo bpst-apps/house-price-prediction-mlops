@@ -22,7 +22,7 @@ DataTransformationConfig = namedtuple(
 # Define model trainer configuration
 ModelTrainerConfig = namedtuple(
     'ModelTrainerConfig',
-    ['trained_model_file_path', 'base_accuracy']
+    ['trained_model_file_path', 'base_accuracy', 'model_config_file_path']
 )
 
 # Define model evaluation configuration

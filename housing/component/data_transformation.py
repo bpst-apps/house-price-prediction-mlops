@@ -1,29 +1,41 @@
 # Importing required packages
 import sys
 import numpy as np
+
+from housing.constant import *
+from housing.logger import logging
+from housing.util.util import (
+    read_yaml_file,
+    save_object,
+    save_numpy_array_data,
+    load_data
+)
+from housing.entity.artifact_entity import (
+    DataIngestionArtifact,
+    DataValidationArtifact,
+    DataTransformationArtifact
+)
+from housing.exception import HousingException
+from housing.entity.config_entity import DataTransformationConfig
+
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-from housing.logger import logging
-from housing.exception import HousingException
-from housing.entity.config_entity import DataTransformationConfig
-from housing.entity.artifact_entity import DataIngestionArtifact, \
-    DataValidationArtifact, DataTransformationArtifact
-
-from housing.constant import *
-from housing.util.util import read_yaml_file, save_object, save_numpy_array_data, load_data
-
 
 class FeatureGenerator(BaseEstimator, TransformerMixin):
 
-    def __init__(self, add_bedrooms_per_room=True,
-                 total_rooms_ix=3,
-                 population_ix=5,
-                 households_ix=6,
-                 total_bedrooms_ix=4, columns=None):
+    def __init__(
+            self,
+            add_bedrooms_per_room=True,
+            total_rooms_ix=3,
+            population_ix=5,
+            households_ix=6,
+            total_bedrooms_ix=4,
+            columns=None
+    ):
         """
         FeatureGenerator Initialization
         add_bedrooms_per_room: bool
@@ -73,12 +85,14 @@ class FeatureGenerator(BaseEstimator, TransformerMixin):
 
 class DataTransformation:
 
-    def __init__(self, data_transformation_config: DataTransformationConfig,
-                 data_ingestion_artifact: DataIngestionArtifact,
-                 data_validation_artifact: DataValidationArtifact
-                 ) -> None:
+    def __init__(
+            self,
+            data_transformation_config: DataTransformationConfig,
+            data_ingestion_artifact: DataIngestionArtifact,
+            data_validation_artifact: DataValidationArtifact
+    ):
         try:
-            logging.info(f"{'=' * 20}Data Transformation log started.{'=' * 20} ")
+            logging.info(f"{'>>' * 30}Data Transformation log started.{'<<' * 30} ")
             self.data_transformation_config = data_transformation_config
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_artifact = data_validation_artifact
@@ -96,7 +110,7 @@ class DataTransformation:
             categorical_columns = dataset_schema[CATEGORICAL_COLUMN_KEY]
 
             num_pipeline = Pipeline(steps=[
-                ('imputer', SimpleImputer(strategy="median")),
+                ('impute', SimpleImputer(strategy="median")),
                 ('feature_generator', FeatureGenerator(
                     add_bedrooms_per_room=self.data_transformation_config.add_bedroom_per_room,
                     columns=numerical_columns
@@ -115,11 +129,11 @@ class DataTransformation:
             logging.info(f"Categorical columns: {categorical_columns}")
             logging.info(f"Numerical columns: {numerical_columns}")
 
-            preprocessing = ColumnTransformer([
+            data_preprocessing = ColumnTransformer([
                 ('num_pipeline', num_pipeline, numerical_columns),
                 ('cat_pipeline', cat_pipeline, categorical_columns),
             ])
-            return preprocessing
+            return data_preprocessing
 
         except Exception as e:
             raise HousingException(e, sys) from e
@@ -191,4 +205,4 @@ class DataTransformation:
             raise HousingException(e, sys) from e
 
     def __del__(self):
-        logging.info(f"{'=' * 20}Data Transformation log completed.{'=' * 20} \n\n")
+        logging.info(f"{'>>' * 30} Data Transformation log completed. {'<<' * 30} \n\n")
